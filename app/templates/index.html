@@ -10,10 +10,15 @@
     <h1>Hello {{ user.get('username') }}</h1>
     <h4>This is the home page!</h4>
     <h6>Email: {{ user.get('email') }}</h6>
-    <h3>My favorite colors</h3>
+    <p>{{ 4 + 7 }}</p>
+    <h3>My favorite colors:</h3>
     <ul>
-        {% for color in colors%}
-        <li>{{ color }} </li>
+        {% for color in colors %}
+            {% if color == 'blue' %}
+                <li>{{ color.upper() }}</li>
+            {% else %}
+                <li>{{ color.lower() }}</li>
+            {% endif %}
         {% endfor %}
     </ul>
 </body>
