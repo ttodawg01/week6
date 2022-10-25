@@ -1,16 +1,24 @@
 from flask import render_template
 from app import app
+from app.forms import SignUpForm
 
-#create a route using the @app.route to trigger function based on endpoint
-@app.route("/")
+# Create routes for our app
+@app.route('/')
 def index():
     user_info = {
-        'username':'tonyc',
-        'email':'tonycampos@gmail.com',
+        'username': 'cbale',
+        'email': 'christianb@movies.com'
     }
-    colors = ['red', 'orange', 'blue']
-    return render_template('index.html', user=user_info, colors = colors)
+    colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet']
+    return render_template('index.html', user=user_info, colors=colors)
+
 
 @app.route('/posts')
 def posts():
-    return 'Hi this is the posts page'
+    return render_template('posts.html')
+
+
+@app.route('/signup')
+def signup():
+    form = SignUpForm()
+    return render_template('signup.html', form=form)

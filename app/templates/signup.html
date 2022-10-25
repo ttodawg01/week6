@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<h1>Hello this is the Sign Up</h1>
+
+<form action="">
+    {{ form.email.label }}
+    {{ form.email(class='form-control', placeholder='Enter Email') }}
+</form>
+{% endblock %}
