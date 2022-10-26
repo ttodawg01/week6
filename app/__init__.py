@@ -15,7 +15,7 @@ app.config.from_object(Config)
 # Create an instance of SQLAlchemy to represent our database
 db = SQLAlchemy(app)
 # Create an instance of Migrate to represent our migration engine
-migrate = Migrate(app, db)
+migrate = Migrate(app, db, render_as_batch = True)
 
 # import all of the routes and models from the routes module in the current folder
 from . import routes, models

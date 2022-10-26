@@ -1,13 +1,28 @@
 from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 
 
-#create a user class that inherits from the db.model
-#Create table user
+# Create a User class that inherits from the db.Model class
+# CREATE TABLE user(id SERIAL PRIMARY KEY, email VARCHAR(50) UNIQUE NOT NULL, etc.)
 
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(50), nullable = False, unique=True)
-    username = db.Column(db.String(50), nullable = False, unique=True)
+    id = db.Column(db.Integer, primary_key=True) 
+    email = db.Column(db.String(50), nullable=False, unique=True)
+    username = db.Column(db.String(50), nullable=False, unique=True)
     password = db.Column(db.String(256), nullable=False)
-    date_created = db.Column(db.DateTime, nullable = False, default = datetime.utcnow)
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # Set the password to the hashed version of the password
+        self.password = self.set_password(kwargs.get('password', ''))
+        # Add and commit the new instance to the database
+        db.session.add(self)
+        db.session.commit()
+
+    def __str__(self):
+        return self.username
+
+    def set_password(self, plain_password):
+        return generate_password_hash(plain_password)
