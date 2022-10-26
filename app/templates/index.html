@@ -3,18 +3,9 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <h1>Hello {{ user.get('username') }}!</h1>
-    <h4>This is the home page.</h4>
-    <h6>Email: {{ user['email'] }}</h6>
-    <p>{{ 4 + 7 }}</p>
-    <h3>My favorite colors:</h3>
-    <ul>
-        {% for color in colors %}
-            {% if color == 'blue' %}
-                <li>{{ color.upper() }}</li>
-            {% else %}
-                <li>{{ color.lower() }}</li>
-            {% endif %}
-        {% endfor %}
-    </ul>
+    {% if current_user.is_authenticated %}
+        <h1 class="text-center">Hello {{ current_user }}!</h1>
+    {% else %}
+        <h1 class="text-center">Hello, please sign up or login to use the blog</h1>
+    {% endif %}
 {% endblock content %}
