@@ -7,7 +7,7 @@ from app.models import User, Post
 # Create routes for our app
 @app.route('/')
 def index():
-    posts = Post.query.all()
+    posts = Post.query.order_by(Post.date_created.desc()).all()
     return render_template('index.html', posts=posts)
 
 
@@ -79,3 +79,49 @@ def create():
         return redirect(url_for('index'))
 
     return render_template('create.html', form=form)
+
+
+
+@app.route('/posts/<post_id>')
+def get_post(post_id):
+    post = Post.query.get(post_id)
+    if not Post:
+        flash(f"Post with id #{post_id} does not exist", "warning")
+        return redirect(url_for('index'))
+    return render_template('post.html', post=post)
+
+@app.route('/posts/<post_id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_post(post_id):
+    post = Post.query.get(post_id)
+    if not Post:
+        flash(f"Post with id #{post_id} does not exist", "warning")
+        return redirect(url_for('index'))
+    if post.author != current_user:
+        flash("You do not have permission to edit this post", "danger")
+        return redirect(url_for('index'))
+    form=PostForm()
+    if form.validate_on_submit():
+        # Get the form data
+        new_title = form.title.data
+        new_body = form.body.data
+        #update the post
+        post.update(title=new_title, body=new_body)
+        flash(f"{post.title} has been updated", "success")
+        return redirect(url_for('get_post', post_id=post_id))
+    return render_template('edit_post.html', post=post, form=form)
+
+
+@app.route('/posts/<post_id>/delete', methods=['GET', 'POST'])
+@login_required
+def delete_post(post_id):
+    post = Post.query.get(post_id)
+    if not Post:
+        flash(f"Post with id #{post_id} does not exist", "warning")
+        return redirect(url_for('index'))
+    if post.author != current_user:
+        flash("You do not have permission to delete this post", "danger")
+        return redirect(url_for('index'))
+    post.delete()
+    flash(f"{post.title} has been deleted", "info")
+    return redirect(url_for('index'))
