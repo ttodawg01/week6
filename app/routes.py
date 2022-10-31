@@ -1,7 +1,8 @@
+from crypt import methods
 from flask import render_template, redirect, url_for, flash
 from flask_login import login_user, logout_user
 from app import app
-from app.forms import SignUpForm, LogInForm
+from app.forms import SignUpForm, LogInForm, PostForm
 from app.models import User
 
 # Create routes for our app
@@ -71,3 +72,8 @@ def logout():
     logout_user()
     flash('You have been logged out', 'info')
     return redirect(url_for('index'))
+
+@app.route('/create', methods=['GET', 'POST'])
+def create():
+    form = PostForm()
+    return render_template('create.html', form=form)
