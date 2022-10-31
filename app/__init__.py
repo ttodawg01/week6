@@ -19,6 +19,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 # Create an instance of LoginManager to let our app allow login capabilities
 login = LoginManager(app)
+login.login_view = 'login'
 
 # import all of the routes and models from the routes and models module in the current folder
 from . import routes, models
