@@ -64,4 +64,16 @@ class Post(db.Model):
 
 
 #delete post from database
-    
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def to_dict(self):
+        post_dict = {
+            "id": self.id,
+            "title":self.title,
+            "body":self.body,
+            "date_created":self.date_created,
+            "user_id":self.user_id
+        }
+        return post_dict
